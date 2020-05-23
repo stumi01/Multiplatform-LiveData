@@ -74,13 +74,14 @@ actual open class KLiveData<T> {
     }
 
     internal fun addObserver(lifecycle: KLifecycle, block: (T) -> Unit){
-        var lifecycleAndObserver = this.lifecycleObservers.get(lifecycle)
+        var lifecycleAndObserver = this.lifecycleObservers[lifecycle]
         if(lifecycleAndObserver == null){
             lifecycleAndObserver = KLifecycleAndObserver(lifecycle)
 
             lifecycle.addStopObserver {
                 lifecycleObservers.remove(lifecycle)
             }
+            this.lifecycleObservers[lifecycle] = lifecycleAndObserver
         }
         lifecycleAndObserver.observers.add(block)
 
